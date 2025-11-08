@@ -1,28 +1,40 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import Hero from './components/Hero.jsx';
+import EmailForm from './components/EmailForm.jsx';
+import ResultPanel from './components/ResultPanel.jsx';
+import DeveloperPanel from './components/DeveloperPanel.jsx';
+import LogsPanel from './components/LogsPanel.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [result, setResult] = useState(null);
+  const [lastCurl, setLastCurl] = useState('');
+  const [lastUrl, setLastUrl] = useState('');
+  const [lastPayload, setLastPayload] = useState(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-900">
+      <div className="max-w-6xl mx-auto px-4 py-6 md:py-10 space-y-6">
+        <Hero />
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 space-y-6">
+            <EmailForm
+              onResult={setResult}
+              onCurlSnippet={(curl, url, payload) => { setLastCurl(curl); setLastUrl(url); setLastPayload(payload); }}
+            />
+            <ResultPanel result={result} />
+          </div>
+          <div className="space-y-6">
+            <DeveloperPanel lastCurl={lastCurl} lastUrl={lastUrl} lastPayload={lastPayload} />
+            <LogsPanel />
+          </div>
         </div>
+
+        <footer className="text-center text-xs text-slate-500 py-6">
+          Update the backend URL in your environment variable named VITE_BACKEND_URL.
+        </footer>
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
